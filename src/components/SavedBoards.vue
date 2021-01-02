@@ -3,11 +3,11 @@
     <transition name="slide">
       <div class="sidebar" v-show="expanded">
         <p class="sidebar-menu">
-          <button class="invert" v-on:click="saveBoards" title="Save board for later editing">Save</button>
-          <button class="invert" v-on:click="exportBoard(activeBoardIndex)" title="Export board contents to file">Export</button>
-          <button class="invert small" v-on:click="clearBoard">Clear the board</button>
+          <button class="invert" v-on:click="saveBoards" title="Save board for later editing">Guardar</button>
+          <button class="invert" v-on:click="exportBoard(activeBoardIndex)" title="Export board contents to file">Exportar</button>
+          <button class="invert small" v-on:click="clearBoard">Limpiar el tablero</button>
         </p>
-        <h2>Saved boards</h2>
+        <h2>Tableros guardados</h2>
         <ul>
           <li v-for="(board, index) in boards" :key="index"
             @click="loadBoard(index)"
@@ -16,9 +16,9 @@
             <span class="remove-board" title="remove" @click="removeBoard(index)" v-show="boards.length > 1">✕</span>
           </li>
         </ul>
-        <button @click="createBoard">+ New</button>
+        <button @click="createBoard">+ Nuevo</button>
         <div class="about">
-          Retrospectify V{{ version }}
+          Retros V{{ version }}
         </div>
       </div>
     </transition>

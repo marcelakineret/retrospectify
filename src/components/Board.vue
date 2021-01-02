@@ -4,7 +4,7 @@
       <input class="board-title" v-model="board.title" />
     </p>
     <div class="notes">
-      <div class="empty-state" v-show="!board.notes.length">this is a very empty screen</div>
+      <div class="empty-state" v-show="!board.notes.length">Esta pantalla esta vacía</div>
       <note v-for="note in board.notes" :key="note.id" :content="note.text"
         :type="note.note_type" :position="note.position" :id="note.id" :note-size="note.noteSize"
         :font-size="note.fontSize" :votes="note.votes" :order="note.order" :active="note.id == activeDrag"
@@ -95,15 +95,15 @@ export default {
       var terciary
       switch (type) {
         case 'improvement':
-          placeholderText = 'This needs some improvement'
+          placeholderText = 'Retroalimentación:'
           terciary = 2
           break
         case 'neutral':
-          placeholderText = 'Just a remark'
+          placeholderText = 'Solo una observación...'
           terciary = 1
           break
         case 'positive':
-          placeholderText = 'This went well'
+          placeholderText = 'Esto estuvo bien:'
           terciary = 0
           break
       }

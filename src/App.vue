@@ -3,19 +3,19 @@
     <saved-boards :boards="boards" :active-board-index="activeBoardIndex"></saved-boards>
     <div class="board-content">
       <div class="main_menu">
-        <span class="heading">Retrospectify<sup>™</sup></span>
+        <span class="heading">Retroalimentación<sup>™</sup></span>
         <div class="note_actions">
-          <button class="positive" @click="$refs.board.addNote('positive')">Positive note</button>
-          <button class="neutral" @click="$refs.board.addNote('neutral')">Neutral note</button>
-          <button class="negative" @click="$refs.board.addNote('improvement')">Improvement note</button>
+          <button class="positive" @click="$refs.board.addNote('positive')">Nota Positiva </button>
+          <button class="neutral" @click="$refs.board.addNote('neutral')">Nota Neutral </button>
+          <button class="negative" @click="$refs.board.addNote('improvement')">Nota Retroalimentación</button>
 
           <button @click="$refs.board.reArrange()" title="Rearranges the notes by amount of votes and make them fit the current window">
-            Re-arrange <sup class="beta">BETA</sup>
+            Re-acomodo <sup class="beta">BETA</sup>
           </button>
         </div>
         <div class="board_actions">
-          <span class="subtle" :class="{'hidden':!unsavedChanges}">There are unsaved changes</span>
-          <button v-on:click="saveBoards" :disabled="!unsavedChanges">Save</button>
+          <span class="subtle" :class="{'hidden':!unsavedChanges}">Guardar cambios existentes </span>
+          <button v-on:click="saveBoards" :disabled="!unsavedChanges">Guardar</button>
           <button class="menu-toggle invert" @click.stop="toggleSidebar">☰</button>
         </div>
       </div>
@@ -100,7 +100,7 @@ export default {
 
     boardTitle () {
       let today = moment().format('LL')
-      return `My retrospective for ${today}`
+      return `Mi retrospectiva for ${today}`
     },
 
     saveBoards () {
