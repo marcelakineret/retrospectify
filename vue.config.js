@@ -1,14 +1,14 @@
-const webpack = require('webpack');
-const { version } = require('./package.json')
+const webpack = require("webpack");
+const { version } = require("./package.json");
 
 module.exports = {
-  publicPath: '/retrospective/',
+  publicPath: "/retrospective/",
 
   configureWebpack: {
     plugins: [
       new webpack.DefinePlugin({
-        'VERSION': JSON.stringify(version),
+        VERSION: JSON.stringify(version)
       })
     ]
   }
-}
+};

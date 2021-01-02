@@ -1,23 +1,37 @@
 <template>
-  <div class="board" >
+  <div class="board">
     <p>
       <input class="board-title" v-model="board.title" />
     </p>
     <div class="notes">
-      <div class="empty-state" v-show="!board.notes.length">Esta pantalla esta vacía</div>
-      <note v-for="note in board.notes" :key="note.id" :content="note.text"
-        :type="note.note_type" :position="note.position" :id="note.id" :note-size="note.noteSize"
-        :font-size="note.fontSize" :votes="note.votes" :order="note.order" :active="note.id == activeDrag"
-        @update="updateNote" @stop-drag="stopDrag" @start-drag="startDrag">
-        </note>
+      <div class="empty-state" v-show="!board.notes.length">
+        Esta pantalla esta vacía
+      </div>
+      <note
+        v-for="note in board.notes"
+        :key="note.id"
+        :content="note.text"
+        :type="note.note_type"
+        :position="note.position"
+        :id="note.id"
+        :note-size="note.noteSize"
+        :font-size="note.fontSize"
+        :votes="note.votes"
+        :order="note.order"
+        :active="note.id == activeDrag"
+        @update="updateNote"
+        @stop-drag="stopDrag"
+        @start-drag="startDrag"
+      >
+      </note>
     </div>
   </div>
 </template>
 
 <script>
-import Note from './Note'
-import Positioner from '../positioner'
-import bus from '../bus.js'
+import Note from "./Note";
+import Positioner from "../positioner";
+import bus from "../bus.js";
 
 export default {
   props: {
@@ -31,106 +45,110 @@ export default {
     activeDrag: null
   }),
 
-  beforeMount () {
-    this.positioner = new Positioner()
-    bus.$on('reset-active', () => {
-      this.activeDrag = null
-    })
+  beforeMount() {
+    this.positioner = new Positioner();
+    bus.$on("reset-active", () => {
+      this.activeDrag = null;
+    });
   },
 
   watch: {
-    'board.notes': function (notes) {
-      this.positioner.setGrid(notes)
+    "board.notes": function(notes) {
+      this.positioner.setGrid(notes);
     }
   },
 
   methods: {
-    startDrag (id) {
-      var maxOrder = this.getMaxOrder()
-      var note = this.getNoteById(id)
+    startDrag(id) {
+      let maxOrder = this.getMaxOrder();
+      let note = this.getNoteById(id);
 
       // Set as active
-      this.activeDrag = id
+      this.activeDrag = id;
 
       // This note already is the top one, dont add 1
       if (note.order === maxOrder && maxOrder > 0) {
-        return
+        return;
       } else {
-        this.updateNote(id, {order: maxOrder + 1})
+        this.updateNote(id, { order: maxOrder + 1 });
       }
     },
-    stopDrag (id) {
-      this.updateNote(id, {active: false})
+    stopDrag(id) {
+      this.updateNote(id, { active: false });
     },
 
-    getNoteById (id) {
-      return this.board.notes.find(function (note) {
-        return id === note.id
-      })
+    getNoteById(id) {
+      return this.board.notes.find(function(note) {
+        return id === note.id;
+      });
     },
 
-    updateNote (id, update) {
-      var note = this.getNoteById(id)
+    updateNote(id, update) {
+      let note = this.getNoteById(id);
       if (note) {
         // The whole board is not "initial" anymore
-        if (this.board.initial) { delete this.board.initial }
+        if (this.board.initial) {
+          delete this.board.initial;
+        }
 
         // Update note properties
-        Object.assign(note, update)
+        Object.assign(note, update);
       } else {
-        throw new Error('Where\'s the note!?')
+        throw new Error("Where's the note!?");
       }
-      return note
+      return note;
     },
 
-    getMaxOrder () {
-      return this.board.notes.reduce(function (prev, value) {
-        if (typeof value.order === 'undefined') { return prev }
-        return (prev > value.order ? prev : value.order)
-      }, 0)
+    getMaxOrder() {
+      return this.board.notes.reduce(function(prev, value) {
+        if (typeof value.order === "undefined") {
+          return prev;
+        }
+        return prev > value.order ? prev : value.order;
+      }, 0);
     },
 
-    addNote (type) {
-      var placeholderText
-      var terciary
+    addNote(type) {
+      let placeholderText;
+      let terciary;
       switch (type) {
-        case 'improvement':
-          placeholderText = 'Retroalimentación:'
-          terciary = 2
-          break
-        case 'neutral':
-          placeholderText = 'Solo una observación...'
-          terciary = 1
-          break
-        case 'positive':
-          placeholderText = 'Esto estuvo bien:'
-          terciary = 0
-          break
+        case "improvement":
+          placeholderText = "Retroalimentación:";
+          terciary = 2;
+          break;
+        case "neutral":
+          placeholderText = "Solo una observación...";
+          terciary = 1;
+          break;
+        case "positive":
+          placeholderText = "Esto estuvo bien:";
+          terciary = 0;
+          break;
       }
 
       // Note default props
-      var note = {
+      let note = {
         text: placeholderText,
         note_type: type,
         position: this.positioner.getPositionforNew(terciary),
-        noteSize: {w: 200, h: 150},
+        noteSize: { w: 200, h: 150 },
         fontSize: 1,
         votes: 0,
         order: this.getMaxOrder() + 1,
         id: Math.round(Math.random() * 100000)
-      }
+      };
 
-      this.board.notes.push(note)
+      this.board.notes.push(note);
     },
 
-    reArrange () {
-      this.positioner.setState(this.board.notes)
-      this.positioner.reArrange()
+    reArrange() {
+      this.positioner.setState(this.board.notes);
+      this.positioner.reArrange();
     }
   },
 
   components: {
     Note
   }
-}
+};
 </script>

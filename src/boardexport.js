@@ -1,34 +1,38 @@
-import FileSaver from 'file-saver'
-import _ from 'lodash'
+import FileSaver from "file-saver";
+import _ from "lodash";
 
 class BoardExport {
+  constructor(data) {
+    this.output = "";
+    this.appendtoOutput(data.title);
 
-  constructor (data) {
-    this.output = ''
-    this.appendtoOutput(data.title)
+    const grouped = _.groupBy(data.notes, "note_type");
 
-    const grouped = _.groupBy(data.notes, 'note_type')
+    Object.keys(grouped).forEach(notegroup => {
+      this.appendtoOutput(`\r\nCategory ${notegroup}`);
 
-    Object.keys(grouped).forEach((notegroup) => {
-      this.appendtoOutput(`\r\nCategory ${notegroup}`)
+      const notes = _(grouped[notegroup])
+        .sortBy(["votes", "text"])
+        .reverse()
+        .value();
 
-      const notes = _(grouped[notegroup]).sortBy(['votes', 'text']).reverse().value()
-
-      const notesText = notes.map((note) => {
-        return `${note.text} (${note.votes} votes)`
-      })
-      this.appendtoOutput(notesText.join('\r\n'))
-    })
+      const notesText = notes.map(note => {
+        return `${note.text} (${note.votes} votes)`;
+      });
+      this.appendtoOutput(notesText.join("\r\n"));
+    });
   }
 
-  appendtoOutput (text) {
-    this.output += `${text}\r\n`
+  appendtoOutput(text) {
+    this.output += `${text}\r\n`;
   }
 
-  save () {
-    const output = new Blob([this.output], {type: 'text/plain;charset=utf-8'})
-    FileSaver.saveAs(output, 'export.txt')
+  save() {
+    const output = new Blob([this.output], {
+      type: "text/plain;charset=utf-8"
+    });
+    FileSaver.saveAs(output, "export.txt");
   }
 }
 
-export default BoardExport
+export default BoardExport;
