@@ -1,22 +1,15 @@
-FROM node:9.11.1-alpine
+# base image
+FROM node:12.2.0-alpine
 
-# instalar un simple servidor http para servir nuestro contenido estático
-RUN npm install -g http-server
-
-# hacer la carpeta 'app' el directorio de trabajo actual
+# set working directory
 WORKDIR /app
 
-# copiar 'package.json' y 'package-lock.json' (si están disponibles)
-COPY package*.json ./
+# add `/app/node_modules/.bin` to $PATH
+ENV PATH /app/node_modules/.bin:$PATH
 
-# instalar dependencias del proyecto
+# install and cache app dependencies
+COPY package.json /app/package.json
 RUN npm install
-
-# copiar los archivos y carpetas del proyecto al directorio de trabajo actual (es decir, la carpeta 'app')
-COPY . .
-
-# construir aplicación para producción minificada
-RUN npm run build
+RUN npm install @vue/cli@3.7.0 -g
 
 EXPOSE 8080
-CMD ["npm", "run", "serve"]
